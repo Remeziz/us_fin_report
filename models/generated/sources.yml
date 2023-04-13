@@ -1,0 +1,10 @@
+version: 2
+sources:
+- name: main
+  quoting:
+    database: true
+    schema: false
+    identifier: false
+  tables:
+  - name: us_get_v2_settlement_report_data_flat_file
+  - name: us_get_flat_file_all___y_last_update_general
