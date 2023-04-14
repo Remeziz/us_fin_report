@@ -27,7 +27,7 @@ select date_time,
 
 
 from (
-         select CONVERT_TZ(TIMESTAMP(DATE_FORMAT(`posted-date`, '%Y-%m-%d %H:%i:%s.%f')), '+00:00', '+9:00')   as date_time,
+         select CONVERT_TZ(TIMESTAMP(DATE_FORMAT(`posted-date`, '%Y-%m-%d %H:%i:%s.%f')), '+00:00', '-8:00')   as date_time,
                 `settlement-id`                                                               as settlement_id,
                 `transaction-type`                                                            as type,
                 `order-id`                                                                    as order_id,
