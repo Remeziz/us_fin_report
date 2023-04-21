@@ -1,4 +1,5 @@
-select date_time,
+select  month,
+       date_time,
        settlement_id,
        type,
        order_id,
@@ -27,7 +28,8 @@ select date_time,
 
 
 from (
-         select CONVERT_TZ(TIMESTAMP(DATE_FORMAT(`posted-date`, '%Y-%m-%d %H:%i:%s.%f')), '+00:00', '-8:00')   as date_time,
+         select  DATE_FORMAT(CONVERT_TZ(`posted-date`, '+00:00', '-8:00') , '%Y-%m-01')       as month,
+                 CONVERT_TZ(TIMESTAMP(DATE_FORMAT(`posted-date`, '%Y-%m-%d %H:%i:%s.%f')), '+00:00', '-8:00')   as date_time,
                 `settlement-id`                                                               as settlement_id,
                 `transaction-type`                                                            as type,
                 `order-id`                                                                    as order_id,
@@ -38,7 +40,7 @@ from (
                     else gn.`product-name` end                                                as description,
                 `quantity-purchased`                                                          as quantity,
                 `marketplace-name`                                                            as marketplace,
-                case when `fulfillment-id` = 'AFN' then 'Amazon' end                          as fulfillment,
+                case when `fulfillment-id` = 'AFN' then 'Amazon' else `fulfillment-id` end    as fulfillment,
                 gn.`ship-city`                                                                as order_city,
                 `ship-state`                                                                  as order_state,
                 gn.`ship-postal-code`                                                         as order_postal,
@@ -66,8 +68,10 @@ from (
 
          where `transaction-type` not in ('Current Reserve Amount', 'Previous Reserve Amount Balance')
          and `posted-date`!=''
+         and  CONVERT_TZ(`posted-date`, '+00:00', '-8:00')>= DATE_FORMAT(DATE_SUB(CURRENT_DATE, INTERVAL 3 MONTH), '%Y-%m-01')
 
-         group by CONVERT_TZ(TIMESTAMP(DATE_FORMAT(`posted-date`, '%Y-%m-%d %H:%i:%s.%f')), '+00:00', '-8:00'),
+         group by  DATE_FORMAT(CONVERT_TZ(`posted-date`, '+00:00', '-8:00') , '%Y-%m-01'),
+                   CONVERT_TZ(TIMESTAMP(DATE_FORMAT(`posted-date`, '%Y-%m-%d %H:%i:%s.%f')), '+00:00', '-8:00'),
                   `settlement-id`,
                   `transaction-type`,
                   `order-id`,
@@ -78,7 +82,7 @@ from (
                       else gn.`product-name` end,
                   `quantity-purchased`,
                   `marketplace-name`,
-                  case when `fulfillment-id` = 'AFN' then 'Amazon' end,
+                  case when `fulfillment-id` = 'AFN' then 'Amazon' else `fulfillment-id` end,
                   gn.`ship-city`,
                   `ship-state`,
                   gn.`ship-postal-code`,
@@ -101,7 +105,8 @@ from (
                   `total-amount`
      ) fin
 
-group by date_time,
+group by month,
+         date_time,
          settlement_id,
          type,
          order_id,
