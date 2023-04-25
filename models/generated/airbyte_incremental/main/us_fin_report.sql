@@ -68,7 +68,7 @@ from (
 
          where `transaction-type` not in ('Current Reserve Amount', 'Previous Reserve Amount Balance')
          and `posted-date`!=''
-         and  CONVERT_TZ(`posted-date`, '+00:00', '-8:00')>= DATE_FORMAT(DATE_SUB(CURRENT_DATE, INTERVAL 2 MONTH), '%Y-%m-01')
+         and  CONVERT_TZ(`posted-date`, '+00:00', '-8:00')>= DATE_FORMAT(DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH), '%Y-%m-01')
 
          group by  DATE_FORMAT(CONVERT_TZ(`posted-date`, '+00:00', '-8:00') , '%Y-%m-01'),
                    CONVERT_TZ(TIMESTAMP(DATE_FORMAT(`posted-date`, '%Y-%m-%d %H:%i:%s.%f')), '+00:00', '-8:00'),
