@@ -105,7 +105,7 @@ from (
                   `total-amount`
      ) fin
 
-inner join (select distinct settlements from settlement_join_data
+inner join (select distinct settlements from main.settlement_join_data
   where   currency='USD')
     st on st.settlements=fin.settlement_id
 
