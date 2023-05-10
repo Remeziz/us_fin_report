@@ -62,7 +62,7 @@ from (
                 `other-amount`                                                                as other,
                 `total-amount`                                                                as total
 
-         from main.us_get_v2_settlement_report_data_flat_file ff
+         from main.na_get_v2_settlement_report_data_flat_file ff
                   left join main.us_get_flat_file_all___y_last_update_general gn
                             on gn.`amazon-order-id` = ff.`order-id` and ff.sku = gn.sku
 
